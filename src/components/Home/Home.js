@@ -1,47 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import "./Home.scss";
 
-const Home = ({ cartItems, setCartItems }) => {
+const Home = () => {
   const [products, setProducts] = useState([]);
-  
-  // Hàm để gọi API lấy dữ liệu sản phẩm
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/products'); // Thay đổi URL nếu cần
-      setProducts(response.data);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
-    }
-  };
+  const [cart, setCart] = useState([]);
 
+  // Lấy dữ liệu sản phẩm từ json-server
   useEffect(() => {
-    fetchProducts();
+    fetch("http://localhost:5000/products") // Đường dẫn tới json-server
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
+  // Hàm thêm sản phẩm vào giỏ hàng
   const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
-  };
-
-  const handlePayment = () => {
-    // Chuyển hướng tới trang thanh toán
-    window.location.href = '/payment'; // Có thể sử dụng useNavigate từ react-router-dom thay thế
+    setCart([...cart, product]);
   };
 
   return (
-    <div>
-      <h1>Danh sách sản phẩm</h1>
-      {products.length > 0 ? (
-        products.map((product) => (
-          <div key={product.id}>
-            <h2>{product.name}</h2>
-            <p>Giá: {product.price} VNĐ</p>
-            <button onClick={() => addToCart(product)}>Thêm vào giỏ</button>
-          </div>
-        ))
-      ) : (
-        <p>Đang tải sản phẩm...</p>
-      )}
-      <button onClick={handlePayment}>Thanh toán</button>
+    <div className="home-page">
+      <div className="product-list">
+        <h2>Sản phẩm</h2>
+        {products.length > 0 ? (
+          products.map((product) => (
+            <div key={product.id} className="product-item">
+              <img src={product.image} alt={product.name} />
+              <h3>{product.name}</h3>
+              <p>Giá: {product.price.toLocaleString("vi-VN")} VND</p>
+              <button onClick={() => addToCart(product)}>Thêm vào giỏ</button>
+            </div>
+          ))
+        ) : (
+          <p>Không có sản phẩm nào.</p>
+        )}
+      </div>
+
+      <div className="cart">
+        <h2>Giỏ hàng</h2>
+        {cart.length > 0 ? (
+          cart.map((item, index) => (
+            <div key={index} className="cart-item">
+              <p>
+                {item.name} - {item.price.toLocaleString("vi-VN")} VND
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>Giỏ hàng trống.</p>
+        )}
+        <button className="checkout-btn">Thanh toán</button>
+      </div>
     </div>
   );
 };

@@ -1,27 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import PaymentPopup from "../PaymentPopup/PaymentPopup";
+const Cart = ({ cartItems }) => {
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
 
-const Payment = ({ cartItems }) => {
-  if (!cartItems || cartItems.length === 0) {
-    return <div>Giỏ hàng trống!</div>;
-  }
-
+  const togglePaymentPopup = () => {
+    setShowPaymentPopup(!showPaymentPopup);
+  };
+  
   return (
     <div>
-      <h2>Thanh toán</h2>
-      <ul>
-        {cartItems.map((item, index) => (
-          <li key={index}>
-            {item.name} - {item.price} VNĐ
-          </li>
-        ))}
-      </ul>
-      <h3>
-        Tổng cộng: {cartItems.reduce((total, item) => total + item.price, 0)}{" "}
-        VNĐ
-      </h3>
-      {/* Thêm phần thanh toán tại đây */}
+      <h1>Giỏ hàng</h1>
+      {cartItems.length > 0 ? (
+        <div>
+          <p>Giỏ hàng có {cartItems.length} sản phẩm.</p>
+          <button onClick={togglePaymentPopup}>Thanh toán</button>
+          {/* Nút thanh toán */}
+          
+        </div>
+      ) : (
+        <p>Giỏ hàng trống.</p>
+      )}
+
+      {showPaymentPopup && (
+        <PaymentPopup onClose={togglePaymentPopup} /> // Hiển thị popup thanh toán
+      )}
     </div>
   );
 };
 
-export default Payment;
+export default Cart;

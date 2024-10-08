@@ -1,43 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./LoginPopup.scss";
 
 const LoginPopup = ({ closePopup, onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Đặt useNavigate ở đây
 
-  const handleLogin = () => {
-    const credentials = { username, password };
-    onLogin(credentials);
-
-    // Nếu thông tin đăng nhập hợp lệ, điều hướng đến trang admin
-    if (username === "admin" && password === "admin123") {
-      navigate("/admin"); // Điều hướng tới trang /admin sau khi đăng nhập thành công
-    } else {
-      alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
-    }
+  const handleLogin = (event) => {
+    event.preventDefault();
+    onLogin({ username, password }); // Gọi hàm login
   };
 
   return (
     <div className="login-popup">
-      <div className="login-popup-content">
-        <h2>Đăng nhập</h2>
+      <h2>Đăng Nhập</h2>
+      <form onSubmit={handleLogin}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Tên đăng nhập"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button onClick={handleLogin}>Đăng nhập</button>
-        <button onClick={closePopup}>Đóng</button>
-      </div>
+        <button type="submit">Đăng Nhập</button>
+      </form>
+      <button onClick={closePopup}>Đóng</button>
     </div>
   );
 };

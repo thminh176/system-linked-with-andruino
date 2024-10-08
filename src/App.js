@@ -1,35 +1,44 @@
 import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate, // Import useNavigate
+} from "react-router-dom";
 import Header from "./components/Header/Header";
-import ProductList from "./components/ProductList/ProductList";
-import Cart from "./components/Cart/Cart";
-import PaymentPopup from "./components/Payment/PaymentPopup";
-import "./App.scss";
+import Home from "./components/Home/Home";
+import Admin from "./components/Admin/Admin";
+import LoginPopup from "./components/Login/LoginPopup";
+import './App.scss'
 
 function App() {
   const [isDarkMode, setDarkMode] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [showPayment, setShowPayment] = useState(false);
-
-  const addToCart = (product) => {
-    setCartItems([...cartItems, product]);
-  };
-
-  const removeFromCart = (index) => {
-    const updatedCart = cartItems.filter((_, i) => i !== index);
-    setCartItems(updatedCart);
-  };
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false); // Trạng thái đăng nhập admin
+  const navigate = useNavigate(); // Khai báo useNavigate
 
   const toggleDarkMode = () => {
     setDarkMode(!isDarkMode);
   };
 
   const showLogin = () => {
-    setIsAuthenticated(true);
+    setShowLoginPopup(true);
   };
 
-  const closePayment = () => {
-    setShowPayment(false);
+  const closeLoginPopup = () => {
+    setShowLoginPopup(false);
+  };
+
+  const handleAdminLogin = (credentials) => {
+    if (
+      credentials.username === "admin" &&
+      credentials.password === "admin123"
+    ) {
+      setIsAdminLoggedIn(true);
+      closeLoginPopup();
+      navigate("/admin"); // Chuyển hướng đến trang admin
+    }
   };
 
   return (
@@ -39,20 +48,17 @@ function App() {
         isDarkMode={isDarkMode}
         showLogin={showLogin}
       />
-      <div className="main-content">
-        <ProductList addToCart={addToCart} />
-        <Cart
-          cartItems={cartItems}
-          removeFromCart={removeFromCart}
-          showPayment={() => setShowPayment(true)}
-        />
-      </div>
-      {showPayment && (
-        <PaymentPopup
-          totalAmount={cartItems.reduce((acc, item) => acc + item.price, 0)}
-          closePayment={closePayment}
-        />
+      {showLoginPopup && (
+        <LoginPopup closePopup={closeLoginPopup} onLogin={handleAdminLogin} />
       )}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* Điều hướng đến admin nếu đã đăng nhập */}
+        <Route
+          path="/admin"
+          element={isAdminLoggedIn ? <Admin /> : <Navigate to="/" />}
+        />
+      </Routes>
     </div>
   );
 }
