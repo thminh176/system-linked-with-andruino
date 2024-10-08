@@ -1,0 +1,16 @@
+.notification-container {
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 250px;
+}
+
+.notification-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.notification-container li {
+  margin-bottom: 5px;
+}

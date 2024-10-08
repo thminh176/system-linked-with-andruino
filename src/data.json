@@ -1,0 +1,26 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Cafe Đen",
+      "price": 15000,
+      "image": "https://example.com/cafe-den.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Cafe Sữa",
+      "price": 20000,
+      "image": "https://example.com/cafe-sua.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Trà Đào",
+      "price": 25000,
+      "image": "https://example.com/tra-dao.jpg"
+    }
+  ],
+  "admin": {
+    "username": "admin",
+    "password": "123456"
+  }
+}

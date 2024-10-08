@@ -1,0 +1,23 @@
+.cart {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  width: 30%;
+
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
